@@ -27,7 +27,7 @@ do
 	do
 		$BIN_DIR/record & | savelog
 		$BIN_DIR/playback z.wav
-		sleep 60
+		sleep 30
 		if [ "$?" == "0" ] ;then
 			let success=success+1
 		else

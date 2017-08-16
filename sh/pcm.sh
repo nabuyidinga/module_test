@@ -25,8 +25,8 @@ for j in `seq $num`
 do
 	for i in `seq $num`
 	do
-		$BIN_DIR/record & | savelog
-		$BIN_DIR/playback z.wav
+		$BIN_DIR/record | savelog &
+		$BIN_DIR/playback $BIN_DIR/z.wav
 		sleep 30
 		if [ "$?" == "0" ] ;then
 			let success=success+1

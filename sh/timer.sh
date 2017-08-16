@@ -13,6 +13,7 @@
 #mode=tt
 num=20
 success=0
+netlink=0
 fail=0
 logfile="${LOG_DIR}/${MODULE_LOG}"
 
@@ -20,12 +21,40 @@ savelog(){
 	sed "s/^/$(echo -n `date "+%Y-%m-%d %H:%M:%S"`)\t/" | tee -a $logfile
 }
 
+err(){
+	return 1
+}
+correct(){
+	return 0
+}
 
 for j in `seq $num`
 do
 	for i in `seq $num`
 	do
-		$BIN_DIR/timertest  | savelog
+		if [ $netlink -eq 0 ] ; then
+			$BIN_DIR/timertest  | savelog
+		else
+			$BIN_DIR/gettimeofday
+			time1=$?
+			time2=`date "+%s"`
+			sleep 20
+			$BIN_DIR/gettimeofday
+			time3=$?
+			time4=`date "+%s"`
+			gpassed=`expr $time3 - $time1`
+			dpassed=`expr $time4 - $time2`
+			echo after sleep 20s, gettimeofday passed $gpassed s, date passed $dpassed s
+			deviation=`expr $gpassed - $dpassed`
+			deviation=${deviation#-}
+			if [ $deviation -gt 2 ]; then
+				err
+			else
+				correct
+			fi
+		fi
+
+
 		if [ "$?" == "0" ] ;then
 			let success=success+1
 		else

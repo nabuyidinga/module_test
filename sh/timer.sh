@@ -32,6 +32,7 @@ for j in `seq $num`
 do
 	for i in `seq $num`
 	do
+		echo timer > /sys/bus/clocksource/devices/clocksource0/current_clocksource
 		if [ $netlink -eq 0 ] ; then
 			$BIN_DIR/timertest  | savelog
 		else
@@ -44,7 +45,7 @@ do
 			time4=`date "+%s"`
 			gpassed=`expr $time3 - $time1`
 			dpassed=`expr $time4 - $time2`
-			echo after sleep 20s, gettimeofday passed $gpassed s, date passed $dpassed s
+			echo after sleep 20s, gettimeofday passed $gpassed s, date passed $dpassed s | savelog
 			deviation=`expr $gpassed - $dpassed`
 			deviation=${deviation#-}
 			if [ $deviation -gt 2 ]; then
@@ -60,7 +61,7 @@ do
 		else
 			let fail=fail+1
 		fi
-
+		echo GIC > /sys/bus/clocksource/devices/clocksource0/current_clocksource
 		echo "" | awk -v num=$num -v i=$i -v j=$j -v success=$success -v fail=$fail '{printf"%f%% completed, %d success, %d fail\n", ((j -1) * num + i ) / (num * num ) * 100, success, fail}'| savelog
 	done
 

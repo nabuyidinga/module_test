@@ -20,7 +20,7 @@ export MODULE_LOG
 if [ ! -f "$TESTLIST" ]; then
 	echo "Nothing to do!"
 else
-	for i in `cat $TESTLIST | sed "s/ *\|\t*//g"`
+	for i in `cat $TESTLIST | sed "s/ *\|\t*//g; /^#/d"`
 	do
 		i=${i%%#*}
 		res=`find $SUB_SHELL -name "$i.sh"`

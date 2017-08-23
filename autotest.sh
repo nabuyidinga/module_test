@@ -20,13 +20,14 @@ export MODULE_LOG
 if [ ! -f "$TESTLIST" ]; then
 	echo "Nothing to do!"
 else
-	for i in `cat $TESTLIST`
+	for i in `cat $TESTLIST | sed "s/ *\|\t*//g; /^#/d"`
 	do
-		echo "$i test start" | savelog
+		i=${i%%#*}
 		res=`find $SUB_SHELL -name "$i.sh"`
 		if [ ! -f "$res" ] ; then
 			echo "$i test script no found!" | savelog
 		else
+			echo "$i test start" | savelog
 			MODULE_LOG="${i}_$(echo -n `date "+%Y_%m_%d_%H_%M_%S"`).log"	
 			touch "${LOG_DIR}/${MODULE_LOG}"
 			$res

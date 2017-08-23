@@ -1,2 +1,4 @@
-i2c_autotest
+i2c_autotest #i2c loopback test#
 gdma
+timer
+pcm

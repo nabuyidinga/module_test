@@ -30,7 +30,7 @@ else
 			echo "$i test start" | savelog
 			MODULE_LOG="${i}_$(echo -n `date "+%Y_%m_%d_%H_%M_%S"`).log"	
 			touch "${LOG_DIR}/${MODULE_LOG}"
-			$res
+			$res $*
 			if [ $? -eq 0 ] ; then
 				echo "$i test success!" | savelog
 			else

@@ -6,7 +6,7 @@
 VERSION="Fri Oct 19 11:56:57 CST 2007"
 
 # trap for irruptions
-MEMTESTER=`fine ../ -name "memtester"`
+MEMTESTER=`fine -name "memtester"`
 PPIDKILL=$$
 SIDKILL=$$
 trap "pkill -9 -P ${PPIDKILL};kill -9 $$" INT
@@ -37,10 +37,8 @@ RUN_DURATION_TIME_FLAG=0
 RUN_LOOPS_FLAG=0
 DDPERCOPY_TIME=6s
 
-LOGDIR=/tmp/memtester-log-${$}
+LOGDIR=${PWD}/log/memtester-log-${$}
 mkdir -p ${LOGDIR}
-rm /tmp/memtester-logdir
-echo $LOGDIR > /tmp/memtester-logdir
 
 show_help ()
 {

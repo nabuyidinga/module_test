@@ -25,13 +25,13 @@ fi
 
 run_dmatest 1000 16 65536 5000
 
-while [ `ps | grep -c dma0chan` -gt 1 ]
+while [ `ps | grep -c dma0chan` -ge 1 ]
 do
 	sleep 1
 done
 
-dmesg | grep dmatest > $MODULE_LOG
-success="$success""`awk -F ' ' '{ for(i=1;i<=NF;i++) if($i~/failures/) if($(i-1)!=0) print 0}' $MODULE_LOG`"
+dmesg | grep dmatest > $LOG_DIR/$MODULE_LOG
+success="$success""`awk -F ' ' '{ for(i=1;i<=NF;i++) if($i~/failures/) if($(i-1)!=0) print 0}' $LOG_DIR/$MODULE_LOG`"
 if [ "$success" == "1" ];then
 	echo success! > /dev/ttyS0
 else

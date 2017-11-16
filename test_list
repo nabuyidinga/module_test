@@ -3,3 +3,4 @@ gdma.sh
 timer.sh
 pcm.sh
 memtester-multi.sh -c 4 -m 100 -t 1h
+benchmark.sh #CPU benchmark

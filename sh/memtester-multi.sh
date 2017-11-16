@@ -37,8 +37,8 @@ RUN_DURATION_TIME_FLAG=0
 RUN_LOOPS_FLAG=0
 DDPERCOPY_TIME=6s
 
-#LOGDIR=${PWD}/log/memtester-log-${$}
-mkdir -p ${LOGDIR}
+#LOG_DIR=${PWD}/log/memtester-log-${$}
+#mkdir -p ${LOG_DIR}
 
 show_help ()
 {
@@ -151,7 +151,7 @@ then
 fi
 echo "Working directory: " $PWD
 echo "Memtester: " ${MEMTESTER}
-echo "LOGs directory: " $LOGDIR
+echo "LOGs directory: " $LOG_DIR
 echo
 echo -n "Jobs started at date: "
 date #+%Y/%m/%d\ %H:%M
@@ -200,7 +200,7 @@ do
 			RUN_LOOPS=0
 		fi
 
-		${MEMTESTER} ${MEM_PER_COPY} ${RUN_LOOPS} 2>&1 >> ${LOGDIR}/${MEMTESTER_NUM}.log &
+		${MEMTESTER} ${MEM_PER_COPY} ${RUN_LOOPS} 2>&1 >> ${LOG_DIR}/${MEMTESTER_NUM}.log &
 		# set loops = 0 to make memtester run loop infinitely...
 		# .pogo version will run only one loop by default
 

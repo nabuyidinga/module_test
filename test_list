@@ -1,5 +1,5 @@
-i2c_autotest #i2c loopback test#
-gdma
-timer
-pcm
+i2c_autotest.sh#i2c loopback test#
+gdma.sh
+timer.sh
+pcm.sh
 memtester-multi.sh -c 4 -m 100 -t 1h

@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/bash
 
 logfile="result"
 savelog(){
@@ -20,22 +20,16 @@ export MODULE_LOG
 if [ ! -f "$TESTLIST" ]; then
 	echo "Nothing to do!"
 else
-	for i in `cat $TESTLIST | sed "s/ *\|\t*//g; /^#/d"`
+	cat $TESTLIST | sed "/^#/d; s/#.*$//g" | while read line
 	do
-		i=${i%%#*}
-		res=`find $SUB_SHELL -name "$i.sh"`
-		if [ ! -f "$res" ] ; then
-			echo "$i test script no found!" | savelog
+		MODULE_LOG="${line%%.*}_$(echo -n `date "+%Y_%m_%d_%H_%M_%S"`).log"	
+		touch "${LOG_DIR}/${MODULE_LOG}"
+		chmod 755 $SHELL_DIR"/"$line
+		$SHELL_DIR"/"$line
+		if [ $? -eq 0 ] ; then
+			echo "${line%%.*} test success!" | savelog
 		else
-			echo "$i test start" | savelog
-			MODULE_LOG="${i}_$(echo -n `date "+%Y_%m_%d_%H_%M_%S"`).log"	
-			touch "${LOG_DIR}/${MODULE_LOG}"
-			$res $*
-			if [ $? -eq 0 ] ; then
-				echo "$i test success!" | savelog
-			else
-				echo "$i test fail!" | savelog
-			fi
+			echo "${line%%.*} test fail!" | savelog
 		fi
 	done
 fi

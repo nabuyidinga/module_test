@@ -25,7 +25,7 @@ fi
 
 run_dmatest 1000 16 65536 5000
 
-while [ `ps | grep -c dma0chan` -ge 1 ]
+while [ `ps | grep -c dma0chan` -gt 1 ]
 do
 	sleep 1
 done

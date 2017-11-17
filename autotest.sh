@@ -5,11 +5,12 @@ savelog(){
 	sed "s/^/$(echo -n `date "+%Y-%m-%d %H:%M:%S"`)\t/" | tee -a $logfile
 }
 
-SHELL_DIR=$PWD"/sh"
-BIN_DIR=$PWD"/bin"
-MOD_DIR=$PWD"/mod"
-TESTLIST=$PWD"/test_list"
-LOG_DIR=$PWD"/log"
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+SHELL_DIR=$DIR"/sh"
+BIN_DIR=$DIR"/bin"
+MOD_DIR=$DIR"/mod"
+TESTLIST=$DIR"/test_list"
+LOG_DIR=$DIR"/log"
 export SHELL_DIR
 export BIN_DIR
 export MOD_DIR

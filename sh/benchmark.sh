@@ -8,7 +8,7 @@ run_coremark() {
 
 run_coremark
 
-while [ `ps | grep -c coremark_ci40` -ge 1 ]
+while [ `ps | grep -c coremark_ci40` -gt 1 ]
 do
 	sleep 2
 done
@@ -17,6 +17,7 @@ coremark_mhz=`grep "CoreMark 1.0 :" $LOG_DIR/$MODULE_LOG | awk '{ printf "%d", $
 if [ -e /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq ]; then
 	echo "get cpu freq from cpufreq" > /dev/ttyS0
 	cpufreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq | awk '{ printf "%d", $NF }'`
+	let cpufreq=cpufreq/1000
 else
 	if [ -e /sys/kernel/debug/cpu-freq ]; then
 		echo "get cpu freq from debugfs" > /dev/ttyS0
@@ -24,8 +25,8 @@ else
 		mount -t debugfs none /sys/kernel/debug
 	fi
 	cpufreq=`cat /sys/kernel/debug/cpu-freq | awk '{ printf "%d", $NF }'`
+	let cpufreq=cpufreq/1000000
 fi
-let cpufreq=cpufreq/1000000
 let coremark_mhz=coremark_mhz*100/cpufreq
 if [ $coremark_mhz -le 350 ]; then
 	echo "coremark/MHZ less than 3.5, failed" >> $LOG_DIR/$MODULE_LOG

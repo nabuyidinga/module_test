@@ -2,5 +2,5 @@ i2c_autotest.sh#i2c loopback test#
 gdma.sh
 timer.sh
 pcm.sh
-memtester-multi.sh -c 4 -m 100 -t 1h
+memtester-multi.sh -c 4 -m 50 -t 1h
 benchmark.sh #CPU benchmark

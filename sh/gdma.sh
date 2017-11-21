@@ -12,7 +12,6 @@ run_dmatest(){
 	echo 1 > ${path_dma}/run
 }
 
-
 if [ ! -d ${path}/dmatest ]; then
 	insmod ${MOD_DIR}/dmatest.ko
 fi
@@ -36,5 +35,6 @@ if [ "$success" == "1" ];then
 	echo success! > /dev/ttyS0
 else
 	echo fail! > /dev/ttyS0
+	echo fail! > $LOG_DIR/$MODULE_LOG
 	exit 2
 fi

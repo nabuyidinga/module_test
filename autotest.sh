@@ -19,7 +19,13 @@ export MODULE_LOG
 
 update_line(){
         local times
-        times=`echo $1 | sed "s/(\(.*\))[a-zA-Z0-9].*/\1/"`
+        local tmp
+        tmp=`echo $1 | grep "^(.*)"`
+        if [ $tmp ]; then
+                times=`echo $1 | sed "s/(\(.*\))[a-zA-Z0-9].*/\1/"`
+        else 
+                times=""
+        fi
         if [ "$times" == "loop" ]; then
                 echo loop > /dev/null
                 return 2
@@ -27,11 +33,11 @@ update_line(){
                 sed -i "/$1/s/^/(0)/" $TESTLIST".tmp"
                 return 1
         else
-                if [ $times -gt 1 ]; then
-                        sed -i "/$1/s/$times/$((times-1))/" $TESTLIST".tmp"
+                if [ $times -gt 0 ]; then
+                        sed -i "/$1/s/^($times)/($((times-1)))/" $TESTLIST".tmp"
                         return 1
-                elif [ $times -eq 1 ]; then
-                        sed -i "/$1/s/$times/$((times-1))/" $TESTLIST".tmp"
+                elif [ $times -eq 0 ]; then
+                        sed -i "/$1/s/^($times)/($((times-1)))/" $TESTLIST".tmp"
                         return 0
                 fi
         fi

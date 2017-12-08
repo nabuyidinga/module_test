@@ -48,7 +48,7 @@ continue=1
 if [ ! -f "$TESTLIST" ]; then
         echo "Nothing to do!"
 else
-        cat $TESTLIST | sed "/^#/d; s/#.*$//g"  > $TESTLIST".tmp"
+        cat $TESTLIST | sed "/^#/d; /^$/d; s/#.*$//g"  > $TESTLIST".tmp"
         while [ 1 ]
         do
                 continue=0;
@@ -62,11 +62,19 @@ else
 							MODULE_LOG="${content%%.*}_$(echo -n `date "+%Y_%m_%d_%H_%M_%S"`).log"  
 							touch "${LOG_DIR}/${MODULE_LOG}"
 							#       chmod 755 $SHELL_DIR"/"${content%%.*}".sh"
-							$SHELL_DIR"/"$content
-							if [ $? -eq 0 ] ; then
-								echo "${content%%.*} test success!" | savelog
+							echo $content | grep "\&" > /dev/null
+							if [ $? -eq 1 ]; then
+								content=`echo $content | sed "s/\&//"`
+								$SHELL_DIR"/"$content
+								if [ $? -eq 0 ] ; then
+									echo "${content%%.*} test success!" | savelog
+								else
+									echo "${content%%.*} test fail!" | savelog
+								fi
 							else
-								echo "${content%%.*} test fail!" | savelog
+								content=`echo $content | sed "s/\&//"`
+								$SHELL_DIR"/"$content &
+								echo "${content%%.*} test run in the background!" | savelog
 							fi
                         fi
                 done < $TESTLIST".tmp"

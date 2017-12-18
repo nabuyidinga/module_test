@@ -34,7 +34,7 @@ success="$success""`awk -F ' ' '{ for(i=1;i<=NF;i++) if($i~/failures/) if($(i-1)
 if [ "$success" == "1" ];then
 	echo success! > /dev/ttyS0
 else
-	echo fail! > /dev/ttyS0
-	echo fail! > $LOG_DIR/$MODULE_LOG
+	echo fail! >> /dev/ttyS0
+	echo fail! >> $LOG_DIR/$MODULE_LOG
 	exit 2
 fi

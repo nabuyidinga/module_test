@@ -16,7 +16,7 @@ done
 coremark_mhz=`grep "CoreMark 1.0 :" $LOG_DIR/$MODULE_LOG | tail -n 1 |  awk '{ printf "%d", $4 }'`
 if [ -e /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq ]; then
 	echo "get cpu freq from cpufreq" > /dev/ttyS0
-	cpufreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq | awk '{ printf "%d", $NF }'`
+	cpufreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq | awk '{ printf "%d", $NF }'`
 	let cpufreq=cpufreq/1000
 else
 	if [ -e /sys/kernel/debug/cpu-freq ]; then

@@ -22,13 +22,13 @@ savelog(){
 }
 
 if [ ! -f "$node" ] ;then
-	insmod /bin/module_test/mod/snd-soc-sfax8-pcm.ko
-	insmod /bin/module_test/mod/snd-soc-sfax8-pcm-machine.ko
+	insmod /bin/module_test/mod/sfax8_i2s.ko
+	insmod /bin/module_test/mod/snd-soc-sfax8-i2s-machine.ko
 else
-	rmmod /bin/module_test/mod/sfax8_i2s.ko
-	rmmod /bin/module_test/mod/snd-soc-sfax8-i2s-machine.ko
-	insmod /bin/module_test/mod/snd-soc-sfax8-pcm.ko
-	insmod /bin/module_test/mod/snd-soc-sfax8-pcm-machine.ko
+	rmmod /bin/module_test/mod/snd-soc-sfax8-pcm.ko
+	rmmod /bin/module_test/mod/snd-soc-sfax8-pcm-machine.ko
+	insmod /bin/module_test/mod/sfax8_i2s.ko
+	insmod /bin/module_test/mod/snd-soc-sfax8-i2s-machine.ko
 fi
 
 for j in `seq $num`

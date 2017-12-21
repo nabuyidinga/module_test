@@ -7,5 +7,5 @@ memtester-multi.sh -c 4 -m 50 -t 1h
 benchmark.sh #CPU benchmark
 uart.sh
 sd_file_test.sh test start /dev/mmcblk0p1 /mnt/mmcblk0p1 30000 1024 1000000 1000000 1000
-usb_test.sh x speed /mnt/sda1
-usb_test.sh storage_test start /mnt/sda1/src /mnt/sda1/dst 1024 usb
+storage_test.sh x speed /mnt/sda1
+storage_test.sh storage_test start /mnt/sda1/src /mnt/sda1/dst 1024 usb

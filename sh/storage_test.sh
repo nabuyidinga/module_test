@@ -212,6 +212,8 @@ speed)
 	speed_test $3
 	if [ $? -ne 0 ]; then
 		echo "error: speed test failed" >> $LOG_FILE
+	else
+		echo "success: speed test success" >> $LOG_FILE
 	fi
 ;;
 get_speed)
@@ -240,7 +242,9 @@ else
 	echo "storage test success"
 fi
 
-pid=$(cat /tmp/storage_test_pid)
-echo "kill $pid"
-kill $pid
+if [ "$2" == "start" ];then
+	pid=$(cat /tmp/storage_test_pid)
+	echo "kill $pid"
+	kill $pid
+fi
 

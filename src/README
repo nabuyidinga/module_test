@@ -8,3 +8,4 @@ pcm/i2s: load corresponding module and connect it's tx and rx.
 uart: connect uart1 and uart 3.
 sd: insert an sd-card.
 usb: insert u-disc and create a 200M file named '200M.bin' in it.
+spi: load spi module

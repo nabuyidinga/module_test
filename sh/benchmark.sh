@@ -3,15 +3,10 @@
 # run_coremark $timeout
 run_coremark() {
 	date >> $LOG_DIR/$MODULE_LOG
-	$BIN_DIR/coremark_ci40.elf M2 >> $LOG_DIR/$MODULE_LOG &
+	$BIN_DIR/coremark_ci40.elf M2 >> $LOG_DIR/$MODULE_LOG
 }
 
 run_coremark
-
-while [ `ps | grep -c coremark_ci40` -gt 1 ]
-do
-	sleep 2
-done
 
 coremark_mhz=`grep "CoreMark 1.0 :" $LOG_DIR/$MODULE_LOG | tail -n 1 |  awk '{ printf "%d", $4 }'`
 if [ -e /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq ]; then

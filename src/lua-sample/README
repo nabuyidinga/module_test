@@ -1,0 +1,9 @@
+package/siflower/luci-siflower/modules/luci-base/luasrc/controller/test.lua
+package/siflower/luci-siflower/modules/luci-base/luasrc/model/cbi/lua_test.lua
+package/siflower/luci-siflower/modules/luci-mod-admin-full/luasrc/view/admin_system/test_reboot.htm
+target/linux/siflower/base-files/etc/config/show_info
+target/linux/siflower/base-files/etc/init.d/reboot_test
+
+This is a reboot test, using Value,ListValue,Flag and combine with the /etc/config/xxx,
+the uci configuration.
+

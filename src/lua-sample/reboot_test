@@ -1,0 +1,29 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+
+load_info() {
+	local date
+	local action
+	local delay
+	config_get date $1 date
+	config_get action $1 action
+	config_get delay $1 delay
+	echo $date > /dev/ttyS0
+	while [ $delay -ge 0 ]
+	do
+		echo "..."$delay"..." > /dev/ttyS0
+		sleep 1
+		let delay-=1
+	done
+	if [ $action -eq 1 ]
+	then
+		reboot
+	fi
+	echo all_done > /dev/ttyS0
+}
+
+start() {
+	config_load show_info
+	config_foreach load_info lua_test
+}

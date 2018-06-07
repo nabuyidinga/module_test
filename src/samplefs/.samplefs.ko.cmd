@@ -1,0 +1,1 @@
+cmd_fs/samplefs/samplefs.ko := mipsel-openwrt-linux-uclibc-ld -r  -m elf32ltsmip -T ./scripts/module-common.lds -s --build-id  -o fs/samplefs/samplefs.ko fs/samplefs/samplefs.o fs/samplefs/samplefs.mod.o

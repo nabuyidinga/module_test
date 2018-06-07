@@ -1,0 +1,29 @@
+#!/bin/sh
+
+get_process_name() {
+	pid=$1
+
+	name=`cat /proc/${pid}/comm`
+	if [ -z `cat /proc/${pid}/cmdline` ]; then
+		name=[${name}]
+	fi
+	echo $name
+}
+
+process=`ps | tail -n +2 | awk '{print $1}' | head -n -5`
+
+echo -e "PID\tDirty Pages\tCOMMAND"
+for pid in $process; do
+	if [ -f /proc/${pid}/smaps ]; then
+		echo -en "$pid\t"
+		dirties=`cat /proc/${pid}/smaps | grep Dirty | awk '{print $2}'`
+		echo -en "$((`echo ${dirties} | sed 's/ /+/g'`))\t\t"
+		get_process_name $pid
+	elif [ -d /proc/${pid} ]; then
+		echo "Please set CONFIG_PROC_PAGE_MONITOR in menuconfig!"
+		exit;
+	else
+		continue
+	fi
+done
+

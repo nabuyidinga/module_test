@@ -1,0 +1,14 @@
+1. How to use autotest.
+	Just run auto_test under module_test dir. 'test_list' contain each module shell's name and parameter. if you run
+auto_test, it will run the shell of each line successively.
+
+What need to do when test each module.
+i2c: connect i2c1 tx and i2c2 rx, i2c2 rx and i2c1 tx.
+pcm/i2s: load corresponding module and connect it's tx and rx.
+uart: connect uart1 and uart 3.
+sd: insert an sd-card.
+usb: insert u-disc and create a 200M file named '200M.bin' in it.
+spi: load spi module
+
+
+DON'T COPY THE 'src' DIR TO THE TARGET!!!!

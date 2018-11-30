@@ -12,7 +12,6 @@ run_dmatest(){
 	echo 1 > ${path_dma}/run
 }
 
-
 if [ ! -d ${path}/dmatest ]; then
 	insmod ${MOD_DIR}/dmatest.ko
 fi
@@ -30,11 +29,12 @@ do
 	sleep 1
 done
 
-dmesg | grep dmatest > $MODULE_LOG
-success="$success""`awk -F ' ' '{ for(i=1;i<=NF;i++) if($i~/failures/) if($(i-1)!=0) print 0}' $MODULE_LOG`"
+dmesg | grep dmatest > $LOG_DIR/$MODULE_LOG
+success="$success""`awk -F ' ' '{ for(i=1;i<=NF;i++) if($i~/failures/) if($(i-1)!=0) print 0}' $LOG_DIR/$MODULE_LOG`"
 if [ "$success" == "1" ];then
 	echo success! > /dev/ttyS0
 else
-	echo fail! > /dev/ttyS0
+	echo fail! >> /dev/ttyS0
+	echo fail! >> $LOG_DIR/$MODULE_LOG
 	exit 2
 fi

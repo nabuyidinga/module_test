@@ -15,34 +15,23 @@ num=20
 success=0
 fail=0
 logfile="${LOG_DIR}/${MODULE_LOG}"
-node="/dev/snd/pcmC0D0p"
 
 savelog(){
 	sed "s/^/$(echo -n `date "+%Y-%m-%d %H:%M:%S"`)\t/" | tee -a $logfile
 }
 
-if [ ! -f "$node" ] ;then
-	insmod /bin/module_test/mod/snd-soc-sfax8-pcm.ko
-	insmod /bin/module_test/mod/snd-soc-sfax8-pcm-machine.ko
-else
-	rmmod /bin/module_test/mod/sfax8_i2s.ko
-	rmmod /bin/module_test/mod/snd-soc-sfax8-i2s-machine.ko
-	insmod /bin/module_test/mod/snd-soc-sfax8-pcm.ko
-	insmod /bin/module_test/mod/snd-soc-sfax8-pcm-machine.ko
-fi
 
 for j in `seq $num`
 do
 	for i in `seq $num`
 	do
-		$BIN_DIR/record | savelog &
-		$BIN_DIR/playback $BIN_DIR/z.wav
-		sleep 30
+		$BIN_DIR/spi_test | savelog
 		if [ "$?" == "0" ] ;then
 			let success=success+1
 		else
 			let fail=fail+1
 		fi
+		sleep 1
 
 		echo "" | awk -v num=$num -v i=$i -v j=$j -v success=$success -v fail=$fail '{printf"%f%% completed, %d success, %d fail\n", ((j -1) * num + i ) / (num * num ) * 100, success, fail}'| savelog
 	done

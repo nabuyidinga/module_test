@@ -1,0 +1,53 @@
+1.copy samplefs to linux/fs/
+
+2.modify fs/Makefile and fs/Kconfig, add samplefs
+
+Makefile:
++obj-$(CONFIG_SAMPLEFS_FS)      += samplefs/
+
+Kconfig:
++config SAMPLEFS_FS
++        tristate "Sample filesystem (EXPERIMENTAL)"
++        help
++          Samplefs is a sample filesystem for learning how to build
++          a simple Linux filesystem
++
++          If unsure, say N.
++
++config SAMPLEFS_DEBUG
++       bool "Additional debugging statements for samplefs"
++       depends on SAMPLEFS_FS
++       help
++           Enabling this option adds a few more debugging routines
++           to the samplefs code which slightly increases the size of
++           the samplefs module and can cause additional logging of debug
++           messages in some error paths, slowing performance. This
++           option can be turned off unless you are debugging
++           samplefs problems.  If unsure, say N.
++
+
+
+3.add a package in openwrt if necessary
+
+package/kernel/linux/modules/fs.mk
++
++define KernelPackage/fs-samplefs
++  SUBMENU:=$(FS_MENU)
++  TITLE:=Sample FileSystem support
++  DEFAULT:=n
++  KCONFIG:=\
++       CONFIG_SAMPLEFS_FS=m \
++       CONFIG_SAMPLEFS_DEBUG=y
++  FILES:=$(LINUX_DIR)/fs/samplefs/samplefs.ko
++  AUTOLOAD:=$(call AutoLoad,samplefs)
++endef
++
++define KernelPackage/fs-samplefs/description
++  Kernel module for Sample FileSystem support
++endef
++
++$(eval $(call KernelPackage,fs-samplefs))
++
+
+
+4.choose the configs in menuconfig

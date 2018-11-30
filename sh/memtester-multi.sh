@@ -173,7 +173,7 @@ then
 	echo "Finished the memtester"
 	echo -n "Jobs finished at date: " 
 	date #+%Y/%m/%d\ %H:%M 
-
+	exit 0
 fi &
 
 echo -n "Waiting (PID: $$) for ${MEMTESTERCOPY} memtesters(${MEM_PER_COPY}MB for each). "
@@ -226,3 +226,4 @@ echo "Finished the memtester"
 echo -n "Jobs finished at date: " 
 date #+%Y/%m/%d\ %H:%M
 
+exit 0

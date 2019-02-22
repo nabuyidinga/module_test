@@ -19,10 +19,12 @@ rand(){
 
 rand_filename(){
         length=$(rand $1 $2)
-        prefix=$(head /dev/urandom | tr -dc a-z0-9 | head -c $length)
+	prefix=$(head /dev/urandom | tr -dc a-z0-9)
+	prefix=$(echo $prefix | head -c $length)
 
         length=$(rand $3 $4)
-        suffix=$(head /dev/urandom | tr -dc a-z0-9 | head -c $length)
+        suffix=$(head /dev/urandom | tr -dc a-z0-9)
+        suffix=$(echo $suffix | head -c $length)
 
         temp_filename=$prefix.$suffix
 
@@ -227,6 +229,7 @@ check)
 	else
 		echo "storage test success"
 	fi
+	exit 0
 ;;
 stop)
 	pid=$(cat /tmp/storage_test_pid)

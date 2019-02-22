@@ -2,7 +2,7 @@
 
 logfile="result"
 savelog(){
-        sed "s/^/$(echo -n `date "+%Y-%m-%d %H:%M:%S"`)\t/" | tee -a $logfile
+	sed "s/^/$(echo -n `date "+%Y-%m-%d %H:%M:%S"`)\t/" | tee -a $logfile
 }
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
@@ -18,69 +18,77 @@ export LOG_DIR
 export MODULE_LOG
 
 update_line(){
-        local times
-        local tmp
-        tmp=`echo $1 | grep "^(.*)"`
-        if [ $tmp ]; then
-                times=`echo $1 | sed "s/(\(.*\))[a-zA-Z0-9].*/\1/"`
-        else 
-                times=""
-        fi
-        if [ "$times" == "loop" ]; then
-                echo loop > /dev/null
-                return 2
-        elif [ "$times" == "" ] ; then
-                sed -i "/$1/s/^/(0)/" $TESTLIST".tmp"
-                return 1
-        else
-                if [ $times -gt 0 ]; then
-                        sed -i "/$1/s/^($times)/($((times-1)))/" $TESTLIST".tmp"
-                        return 1
-                elif [ $times -eq 0 ]; then
-                        sed -i "/$1/s/^($times)/($((times-1)))/" $TESTLIST".tmp"
-                        return 0
-                fi
-        fi
-        
+	local times
+	local tmp
+	tmp=`echo $1 | grep "^(.*)"`
+	if [ $tmp ]; then
+		times=`echo $1 | sed "s/(\(.*\))[a-zA-Z0-9].*/\1/"`
+	else
+		times=""
+	fi
+	if [ "$times" == "loop" ]; then
+		echo loop > /dev/null
+		return 2
+	elif [ "$times" == "" ] ; then
+		sed -i "/$1/s/^/(0)/" $TESTLIST".tmp"
+		return 1
+	else
+		if [ $times -gt 0 ]; then
+			sed -i "/$1/s/^($times)/($((times-1)))/" $TESTLIST".tmp"
+			return 1
+		elif [ $times -eq 0 ]; then
+			sed -i "/$1/s/^($times)/($((times-1)))/" $TESTLIST".tmp"
+			return 0
+		fi
+	fi
+
 }
 continue=1
 
 if [ ! -f "$TESTLIST" ]; then
-        echo "Nothing to do!"
+	echo "Nothing to do!"
 else
-        cat $TESTLIST | sed "/^#/d; /^$/d; s/#.*$//g"  > $TESTLIST".tmp"
-        while [ 1 ]
-        do
-                continue=0;
-                while read line
-                do
-                        update_line $line
-                        re=$?
-                        continue=$((continue+re))
-                        if [ $re -ne 0 ]; then
-							content=`echo $line | sed "s/^(.*)//"`
-							MODULE_LOG="${content%%.*}_$(echo -n `date "+%Y_%m_%d_%H_%M_%S"`).log"  
-							touch "${LOG_DIR}/${MODULE_LOG}"
-							#       chmod 755 $SHELL_DIR"/"${content%%.*}".sh"
-							echo $content | grep "\&" > /dev/null
-							if [ $? -eq 1 ]; then
-								content=`echo $content | sed "s/\&//"`
-								$SHELL_DIR"/"$content
-								if [ $? -eq 0 ] ; then
-									echo "${content%%.*} test success!" | savelog
-								else
-									echo "${content%%.*} test fail!" | savelog
-								fi
-							else
-								content=`echo $content | sed "s/\&//"`
-								$SHELL_DIR"/"$content &
-								echo "${content%%.*} test run in the background!" | savelog
-							fi
-                        fi
-                done < $TESTLIST".tmp"
-        if [ $continue -eq 0 ]; then
-                rm $TESTLIST".tmp"
-                exit 0
-        fi
-        done
+	for file in `ls "/sys/class/leds/"`;do
+		echo "timer" > /sys/class/leds/$file/trigger
+		echo "100" > /sys/class/leds/$file/delay_on
+		echo "100" > /sys/class/leds/$file/delay_off
+	done
+	cat $TESTLIST | sed "/^#/d; /^$/d; s/#.*$//g"  > $TESTLIST".tmp"
+	while [ 1 ]
+	do
+		continue=0;
+		while read line
+		do
+			update_line $line
+			re=$?
+			continue=$((continue+re))
+			if [ $re -ne 0 ]; then
+				content=`echo $line | sed "s/^(.*)//"`
+				MODULE_LOG="${content%%.*}_$(echo -n `date "+%Y_%m_%d_%H_%M_%S"`).log"  
+				touch "${LOG_DIR}/${MODULE_LOG}"
+				#       chmod 755 $SHELL_DIR"/"${content%%.*}".sh"
+				echo $content | grep "\&" > /dev/null
+				if [ $? -eq 1 ]; then
+					content=`echo $content | sed "s/\&//"`
+					$SHELL_DIR"/"$content
+					if [ $? -eq 0 ] ; then
+						echo "${content%%.*} test success!" | savelog
+					else
+						echo "${content%%.*} test fail!" | savelog
+						for file in `ls "/sys/class/leds/"`;do
+							echo "default-on" > /sys/class/leds/$file/trigger
+						done
+					fi
+				else
+					content=`echo $content | sed "s/\&//"`
+					$SHELL_DIR"/"$content &
+					echo "${content%%.*} test run in the background!" | savelog
+				fi
+			fi
+		done < $TESTLIST".tmp"
+		if [ $continue -eq 0 ]; then
+			rm $TESTLIST".tmp"
+			exit 0
+		fi
+	done
 fi

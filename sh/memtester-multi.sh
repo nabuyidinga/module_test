@@ -37,8 +37,10 @@ RUN_DURATION_TIME_FLAG=0
 RUN_LOOPS_FLAG=0
 DDPERCOPY_TIME=6s
 
-#LOG_DIR=${PWD}/log/memtester-log-${$}
-#mkdir -p ${LOG_DIR}
+LOG_DIR=/tmp/memtester-log-${$}
+mkdir -p ${LOG_DIR}
+rm /tmp/memtester-logdir
+echo $LOG_DIR > /tmp/memtester-logdir
 
 show_help ()
 {
@@ -171,7 +173,7 @@ then
 	echo "Finished the memtester"
 	echo -n "Jobs finished at date: " 
 	date #+%Y/%m/%d\ %H:%M 
-
+	exit 0
 fi &
 
 echo -n "Waiting (PID: $$) for ${MEMTESTERCOPY} memtesters(${MEM_PER_COPY}MB for each). "
@@ -224,3 +226,4 @@ echo "Finished the memtester"
 echo -n "Jobs finished at date: " 
 date #+%Y/%m/%d\ %H:%M
 
+exit 0

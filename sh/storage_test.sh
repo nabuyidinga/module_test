@@ -81,7 +81,7 @@ do_one_test(){
 		return 1
 	fi
 	echo "$(date "+%H:%M:%S")  success" >> $LOG_FILE
-	rm -rf ${1}/* ${2}/*
+	rm -rf ${1} ${2}
 	return 0
 }
 
